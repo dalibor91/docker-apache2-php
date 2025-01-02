@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+APP_DIR="$( cd $( dirname "$( dirname "${BASH_SOURCE[0]}" )" ) && pwd )"
+APP_LOG="${APP_DIR}/record.log"
+
+function log() {
+    echo "[`date`] [`whoami`] $@"
+    echo "[`date`] [`whoami`] $@" >> $APP_LOG
+}
+
+function run_cmd() {
+    local cmd_running=$@
+    log "${cmd_running}"
+    eval "${cmd_running}" >> $APP_LOG 2>&1
+    if ! [ $? -eq 0 ];
+    then 
+        echo "Command failed: '${cmd_running}'"
+    fi
+}
+
+if [ "${IMAGE_VERSION}" = "" ];
+then
+    for version in $(echo "7.4 8.0 8.1 8.2 8.3 8.4");
+    do 
+        run_cmd "IMAGE_VERSION=$version bash -c '$0'";
+    done
+else 
+    IMAGE_NAME="${IMAGE_REPO:-"apache2-php"}:${IMAGE_VERSION}"
+    DOCKER_FILE="${APP_DIR}/docker/Dockerfile"
+    run_cmd "docker build --progress plain -t $IMAGE_NAME --build-arg PHP_VERSION=$IMAGE_VERSION -f $DOCKER_FILE $APP_DIR"
+fi
