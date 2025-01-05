@@ -41,9 +41,6 @@ RUN apt-get update && apt-get install -y \
     php-intl \
     php-log
 
-#     php$PHP_VERSION-json \
-
-
 RUN php -r " file_put_contents('cs.php', file_get_contents('https://getcomposer.org/installer')); if (hash_file('SHA384', 'cs.php') !== trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Corupted'.PHP_EOL; unlink('cs.php'); } " && \
     php cs.php --install-dir=/usr/local/bin --filename=composer  && \
     rm cs.php

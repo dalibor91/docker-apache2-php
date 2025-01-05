@@ -1,0 +1,31 @@
+name: Docker Images for PHP 5
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker/Dockerfile
+      - .github/workflows/docker-5.yml
+
+env:
+  IMAGE_REPO: "dbor91/apache2-php"
+
+jobs:
+  "PHP-5_6":
+    runs-on: ubuntu-latest
+    env: 
+      IMAGE_VERSION: "5.6"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
+      - name: Build Images
+        run: bash bin/build-image
+
+      - name: Push
+        run: docker push $IMAGE_REPO:$IMAGE_VERSION

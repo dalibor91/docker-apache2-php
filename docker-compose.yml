@@ -1,0 +1,12 @@
+services:
+  php:
+    build:
+      dockerfile: Dockerfile 
+      context: docker
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    volumes:
+      - "./docker/html:/var/www/html"
+    ports:
+      - 8080:80
+    image: "php${PHP_VERSION}"

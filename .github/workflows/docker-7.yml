@@ -1,0 +1,86 @@
+name: Docker Images for PHP 7
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker/Dockerfile
+      - .github/workflows/docker-7.yml
+
+env:
+  IMAGE_REPO: "dbor91/apache2-php"
+
+jobs:
+  "PHP-7_0":
+    runs-on: ubuntu-latest
+    env: 
+      IMAGE_VERSION: "7.0"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
+      - name: Build Images
+        run: bash bin/build-image
+
+      - name: Push
+        run: docker push $IMAGE_REPO:$IMAGE_VERSION
+
+  "PHP-7_1":
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_VERSION: "7.1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
+      - name: Build Images
+        run: bash bin/build-image
+
+      - name: Push
+        run: docker push $IMAGE_REPO:$IMAGE_VERSION
+
+  "PHP-7_2":
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_VERSION: "7.2"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
+      - name: Build Images
+        run: bash bin/build-image
+
+      - name: Push
+        run: docker push $IMAGE_REPO:$IMAGE_VERSION
+
+  "PHP-7_4":
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_VERSION: "7.4"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          
+      - name: Build Images
+        run: bash bin/build-image
+
+      - name: Push
+        run: docker push $IMAGE_REPO:$IMAGE_VERSION
+

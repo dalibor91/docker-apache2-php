@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+VERSIONS=${VERSIONS:-"5.6 7.0 7.1 7.2 7.4 8.0 8.1 8.2 8.3 8.4"}
 APP_DIR="$( cd $( dirname "$( dirname "${BASH_SOURCE[0]}" )" ) && pwd )"
 APP_LOG="${APP_DIR}/record.log"
 
@@ -15,14 +16,15 @@ function run_cmd() {
     if ! [ $? -eq 0 ];
     then 
         echo "Command failed: '${cmd_running}'"
+        exit 1
     fi
 }
 
 if [ "${IMAGE_VERSION}" = "" ];
 then
-    for version in $(echo "7.4 8.0 8.1 8.2 8.3 8.4");
+    for ver in $(echo $VERSIONS);
     do 
-        run_cmd "IMAGE_VERSION=$version bash -c '$0'";
+        run_cmd "IMAGE_VERSION=$ver bash -c '$0'";
     done
 else 
     IMAGE_NAME="${IMAGE_REPO:-"apache2-php"}:${IMAGE_VERSION}"
